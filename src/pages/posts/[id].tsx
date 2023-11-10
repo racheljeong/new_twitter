@@ -40,7 +40,7 @@ const ItemDetail: NextPage = () => {
   };
 
   return (
-    <Layout canGoBack>
+    <Layout canGoBack title="Tweets">
     <div className="px-4 py-4">
     <div className="mb-8">
       <div className="h-72 bg-slate-300" />
@@ -59,9 +59,11 @@ const ItemDetail: NextPage = () => {
       <div className="mt-5">
         <h1 className="text-xl font-bold text-gray-900">{data?.posts?.name}</h1>
         <div className=" my-6 text-gray-700">
-        {data?.posts?.contents}
-        <div className="absolute right-48 text-sm text-slate-500">
+        <div className="justify-items-end text-sm text-slate-500 mb-5">
           {(data?.posts.createdAt) ? new Date(data?.posts.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' }) : ""}
+        </div>
+        <div className="text-base text-slate-500 font-semibold">
+          {data?.posts?.contents}
         </div>
         </div>
         <div className="flex items-center justify-between space-x-2">
@@ -82,11 +84,11 @@ const ItemDetail: NextPage = () => {
                   viewBox="0 0 20 20"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path
-                    fillRule="evenodd"
-                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                    clipRule="evenodd"
-                  ></path>
+                <path
+                  fillRule="evenodd"
+                  d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                  clipRule="evenodd"
+                ></path>
                 </svg>
                 ) : (
                   <svg

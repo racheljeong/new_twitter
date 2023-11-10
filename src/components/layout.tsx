@@ -2,6 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { cls } from "../libs/client/utils";
 import { useRouter } from "next/router";
+import useUser from "@/libs/client/useUser";
 
 interface LayoutProps {
   title?: string;
@@ -21,10 +22,13 @@ export default function Layout({
   const onClick = () => {
     router.back();
   };
+
+  const {user} = useUser(); //로그인여부 판단하여 protection 역할함
+  console.log(`users in Layout`,{user});
   
   return (
     <div>
-    <div className="justify-center text-lg px-10 font-medium text-gray-800 border-b top-0 flex items-center">
+    <div className="justify-center text-lg px-10 py-4 font-medium text-gray-800 border-b top-0 flex items-center">
     {canGoBack ? (
          <button onClick={onClick} className="absolute left-4 m-0">
          <svg
@@ -44,7 +48,7 @@ export default function Layout({
        </button>
      ) : null}
       {title ? (
-          <span className={cls(canGoBack ? "mx-auto" : "text-6xl text-center mt-5 font-bold text-sky-500", "")}>{title}</span>
+          <span className={cls(canGoBack ? "text-4xl text-center mt-5 font-bold text-sky-500" : "text-6xl text-center mt-5 font-bold text-sky-500", "")}>{title}</span>
         ) : null}
       </div>
       <div className={cls("pt-12", hasTabBar ? "my-4" : "")}>{children}</div>
@@ -75,7 +79,7 @@ export default function Layout({
           {/* <span>홈</span> */}
       </Link>
 
-    <Link href="/profile"
+    <Link href={`/users/${user?.id}`}
       className={cls(
         "flex flex-col items-center space-y-2 ",
         router.pathname === "/profile"

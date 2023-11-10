@@ -7,6 +7,7 @@ interface ProfileResponse {
     ok: boolean;
     profile: User;
   }
+  
 //useUser : 로그인 여부를 따져서 로그인 되어있을때만 실행하는 protector 함수
 export default function  useUser() {
     //SWR
@@ -17,7 +18,7 @@ export default function  useUser() {
 
     useEffect(() => {
         if(data && !data.ok) {
-            router.replace("/enter");
+            router.replace("/create-account");
         }
     },[data,router]);
 
