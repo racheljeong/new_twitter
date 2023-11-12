@@ -4,42 +4,65 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useMutation from "../libs/client/useMutation";
 
 interface IDataForm {
     email : string;
 }
 
+interface MutationResult {
+  ok: boolean;
+  error? : boolean;
+}
+
 const LogIn : NextPage = () => {
 
+  const [login, { loading, data }] = 
+            useMutation<MutationResult>("/api/users/log-in");
 
-    const { register, 
-            handleSubmit,
-            formState : {errors},
+  const { register, 
+          handleSubmit,
+          formState : {errors},
         } = useForm<IDataForm>();
 
-    const [loading, setLoading] = useState(false);
+    //const [isLoading, setLoading] = useState(false);
     const router = useRouter();
+   
 
     const onValid = async (data : IDataForm) => {
         console.log(`IDataForm`, data);
-        
-
-        if (!loading) {
-            const request = await fetch("/api/users/log-in", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json"
-              },
-              body: JSON.stringify(data)
-            });
-            if (request.status === 200) {
-              router.push("/");
-            } else {
-              setLoading(false);
-            }
-          }
+        if (loading) return;
+        login(data);
     }
+
+    useEffect(() => {
+      console.log(data);
+      if (data?.ok) {
+        alert("Login Seccess");
+        router.replace("/");
+
+      } else if (data?.error) {
+        alert("Login Failed");
+      }
+    }, [data, router]);
+
+
+  //     if (!loading) {
+  //         const request = await fetch("/api/users/log-in", {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json"
+  //           },
+  //           body: JSON.stringify(data)
+  //         });
+  //         if (request.status === 200) {
+  //           router.push("/");
+  //         } else {
+  //           setLoading(false);
+  //         }
+  //       }
+  // }
 
 
     return (
@@ -52,7 +75,7 @@ const LogIn : NextPage = () => {
               >
               <Input
                   register={register("email", {
-                  required: true,
+                  required: "Email is reuired.",
                   })}
                   name="email"
                   label="Email address"
@@ -64,6 +87,6 @@ const LogIn : NextPage = () => {
     </div>
     </Layout>
       );
-}
+};
 
 export default LogIn;
