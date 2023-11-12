@@ -11,10 +11,12 @@ import Layout from "@/components/layout";
 interface EnterForm {
   name : string;
   email : string;
+  accountErrors? : string;
 }
 
 interface MutationResult {
-  ok: boolean;
+  ok: boolean; 
+  error? : string;
 }
 
 const Enter: NextPage = () => {
@@ -22,9 +24,9 @@ const Enter: NextPage = () => {
 //enter func = mutation을 작동시킬 function (trigger func for mutation)
 
   const [enter, { loading, data, error }] = useMutation<MutationResult>("/api/users/enter");
-  console.log(`login Data`, data);
+  console.log(`create-account Data`, data);
   
-  const {register, reset, handleSubmit} = useForm<EnterForm>();
+  const {register, reset, handleSubmit, setError} = useForm<EnterForm>();
 
   const onValid = (validForm : EnterForm) => {
     if (loading) return;
@@ -33,16 +35,23 @@ const Enter: NextPage = () => {
   };
   
   const router = useRouter();
+
   useEffect(() => {
-    if(data?.ok) {
+    if(data?.ok && data.ok) {
+      alert("Creating account is Success");
       router.push("/log-in");
+    }else if(data && !data.ok && data.error){
+      alert(data.error);
     }
   },[data, router]);
 
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+                //   /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
 
-  const emailValidChk = (email : any) => {
-      if(pattern.test(email) === false) { return false; }
+  const emailValidChk = (email : string) => {
+      if(pattern.test(email) === false) {
+         return pattern.test(email) || "Not available Email form."
+        }
       else { return true; }
   }
  
@@ -64,6 +73,9 @@ const Enter: NextPage = () => {
               <Input
                   register={register("email", {
                   required: "Email is required",
+                  validate : {
+                    emailValidChk,
+                  },
                   // pattern: {
                   //   value: /^[A-Za-z0-9._%+-]+@+/^[A-Za-z0-9._%+-].com$/,
                   //   message: "Only naver.com emails allowed",

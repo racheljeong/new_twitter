@@ -12,10 +12,12 @@ interface ProfileResponse {
 export default function  useUser() {
     //SWR
     //인자1 : 요청보낼 URL (캐시저장할때 사용할 key가 된다)
-    //2: fetcher function : 첫번째 url인자를 가져다가
     const { data, error } = useSWR<ProfileResponse>("/api/users/me");  
     const router = useRouter();
 
+    console.log(`data in useUser : ${data}`);
+    console.log(`path`,router.pathname);
+    
     useEffect(() => {
         if(data && !data.ok) {
             router.replace("/create-account");

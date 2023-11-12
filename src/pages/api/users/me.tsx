@@ -18,55 +18,56 @@ async function handler(
       where: { id: req.session.user?.id },
     });
 
-    res.json({
+    //res 죽이기위해 return 추가
+    return res.json({
       ok: true,
       profile,
     });
   }
 
-  if (req.method === "POST") {
-    const {
-      session: { user },
-      body: { name },
-    } = req;
+  
 
-    const currentUser = await client.user.findUnique({
-      where: {
-        id: user?.id,
-      },
-    });
+  // if (req.method === "POST") {
+  //   const { session: { user }, body: { name },} = req;
 
-    if (name && name !== currentUser?.name) {
-        //변경하려는 로직
-      const alreadyExists = Boolean(
-        await client.user.findUnique({
-          where: {
-            name,
-          },
-          select: {
-            id: true,
-          },
-        })
-      );
+  //   const currentUser = await client.user.findUnique({
+  //     where: {
+  //       id: user?.id,
+  //     },
+  //   });
 
-      if (alreadyExists) {
-        return res.json({
-          ok: false,
-          error: "Name already taken.",
-        });
-      }else {
-      await client.user.update({
-        where: {
-          id: user?.id,
-        },
-        data: {
-          name,
-        },
-      });
-    }
-      res.json({ ok: true });
-    }
-  }
+  //   if (name && name !== currentUser?.name) {
+  //       //변경하려는 로직
+  //     const alreadyExists = Boolean(
+  //       await client.user.findUnique({
+  //         where: {
+  //           name,
+  //         },
+  //         select: {
+  //           id: true,
+  //         },
+  //       })
+  //     );
+
+  //     if (alreadyExists) {
+  //       return res.json({
+  //         ok: false,
+  //         error: "Name already taken.",
+  //       });
+  //     }
+
+  //     await client.user.update({
+  //       where: {
+  //         id: user?.id,
+  //       },
+  //       data: {
+  //         name,
+  //       },
+  //     });
+  //     res.json({ ok: true });
+   
+  //   }
+  // }
 }
 
 

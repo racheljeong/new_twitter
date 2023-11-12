@@ -11,36 +11,46 @@ async function handler
    
    const {email, name} = req.body;
    console.log(`email : ${email} name, ${name}`);
+  
+    try{
+        const alreadyEx = await client.user.findUnique ({
+          where : {
+            email,
+          }
+      });
+      if(alreadyEx) {
+        //console.log(`already existed`);
+        return res.status(400)
+                  .json({
+                    ok: false,
+                    error : "Already in use." 
+                });
+      }
 
-    const alreadyEx = await client.user.findUnique ({
-        where : {
-          email,
-        }
-    });
-    if(alreadyEx) {
-      console.log(`already existed`);
-      return res.json({
-        ok: true, 
-    });
-    }
-
-    const findUser = await client.user.create({
-    
-        data : {
-          name, 
-          email
-        },
-    });
-
-    if(findUser){
-      res.status(200).end();
-    }
-
-    console.log(`findUser`,findUser);
+      const findUser = await client.user.create({
       
-      return res.json({
-          ok: true,
-      });  
+          data : {
+            name, 
+            email
+          },
+      });
+
+      // if(findUser){
+      //   res.status(200).end();
+      // }
+
+      console.log(`findUser`,findUser);
+        
+        return res.json({
+            ok: true,
+            findUser
+        });  
+
+    }catch {
+      return res
+      .status(500)
+      .json({ ok: false, error: "Something went wrong." });
+    }
   }
    
 

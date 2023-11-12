@@ -15,9 +15,9 @@ export default function Item({
 }: ItemProps) {
   return (
     <Link href={`/posts/${id}`}
-        className="flex px-4 py-5 my-3 bg-slate-100 cursor-pointer justify-between rounded-md hover:border-4 hover:border-solid hover:border-sky-300">
+        className="flex px-4 py-4 m-4 bg-slate-100 border-solid border-sky-200 border-2 cursor-pointer justify-between rounded-md hover:border-2 hover:border-solid hover:border-sky-300">
         <div className="flex space-x-4 space-y-4">
-          <div className="w-20 h-20 bg-sky-100 rounded-md" />
+          <div className="w-20 h-20 bg-slate-300 rounded-md" />
           <div className="pt-2 flex flex-col">
             <h3 className="text-sm font-medium text-gray-900">{title}</h3>
           </div>

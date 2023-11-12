@@ -10,6 +10,7 @@ res:NextApiResponse<ResponseType>) {
    
     const {email} = req.body;
     console.log(`email in loginApi : ${email}`)
+
     const user = await client.user.findUnique({
         where: {
             email
@@ -26,6 +27,7 @@ res:NextApiResponse<ResponseType>) {
     
         return res.json({
             ok: true,
+            user,
         });  
     }
 
