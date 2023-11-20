@@ -35,6 +35,3 @@ res:NextApiResponse<ResponseType>) {
 export default withApiSession(
     withHandler({ methods: ["POST"], handler, isPrivate: false })
   );
-//1  handler function 작성 : handler
-//2  export default function(HTTP method, handler funcion)
-//3  withHandler의 역할은 HTTP method 보내는걸 대신 해줌
