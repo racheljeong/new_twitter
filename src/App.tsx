@@ -63,6 +63,7 @@ function App() {
   const init = async () => {
     await auth.authStateReady();
     setLoading(false);
+    console.log(`router ::` ,{router});
   };
   useEffect(() => {
     init();

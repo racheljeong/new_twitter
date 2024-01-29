@@ -4,6 +4,7 @@ import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { FirebaseError } from "firebase/app";
+import GithubButton from "../components/github-btn";
 
 
 export default function CreateAccount() {
@@ -43,7 +44,7 @@ export default function CreateAccount() {
             await updateProfile(credentials.user, {
                 displayName: name,
             });
-            navigate("/");
+            navigate("/login");
         } catch (e) {
             if(e instanceof FirebaseError){
                 setError(e.message);
@@ -63,8 +64,9 @@ export default function CreateAccount() {
         </Form>
         {error !== "" ? <Error>{error}</Error> : null}
         <Switcher>
-            Already have one?<Link to ="/login">Create one &rarr;</Link>
+            Already have one?<Link to ="/login">Login &rarr;</Link>
         </Switcher>
+        <GithubButton />
     </Wrapper>
     )
 }

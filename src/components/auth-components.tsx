@@ -43,3 +43,9 @@ export const Switcher = styled.span`
         color: #1d9bf0;
     }
 `;
+
+export const Button = styled.button`
+    color: #111111;
+    padding: 10px 20px;
+    border-radius: 50px;
+`;

@@ -11,8 +11,8 @@ export default function ProtectedRoute({children} : {children:React.ReactNode}){
 
     //로그인 확인
     const user = auth.currentUser;  //user || null
-    console.log(user);
-    if(!user){
+    console.log(`user :: `,user);
+    if(user === null){
         return <Navigate to="/login" />
     }
     return children;
