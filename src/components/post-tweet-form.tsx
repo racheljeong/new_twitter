@@ -75,8 +75,17 @@ export default function PostTweetForm() {
     const onFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
         //e.target.file
         const { files } = e?.target;
+        
         if(files && files.length === 1){
-            setFile(files[0]);
+            //setFile(files[0]);
+            const chosenFile = files[0];
+            const maxFileSize = 1 * 1024 * 1024; //1MB
+            if(chosenFile.size >= maxFileSize){
+              //console.log(chosenFile.size);
+              alert("The maximum file size is 1MB");
+              return;
+            }
+            setFile(chosenFile);
         }
     }
 
@@ -96,6 +105,7 @@ export default function PostTweetForm() {
         });
         //file 첨부여부 확인
         if(file){
+         
           //업로드 파일의 폴더명, 파일명 지정 : userId/docId 로 빠르게 crud가능
           const locationRef = ref(
             storage, 
