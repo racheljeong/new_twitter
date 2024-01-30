@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import PostTweetForm from "../components/post-tweet-form";
+import Timeline from "../components/timeline";
 
 const Wrapper = styled.div`
-    background-color: white;
-    height: 100vh;
+    display:grid;
+    gap: 50px;
+    overflow-y: scroll;
+    grid-template-rows: 1fr 5fr;
 `;
 
 export default function Home() {
@@ -11,6 +14,7 @@ export default function Home() {
     return (
         <Wrapper>
              <PostTweetForm />
+             <Timeline />
          </Wrapper>
     
     );
