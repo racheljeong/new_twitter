@@ -10,9 +10,9 @@ const Wrapper = styled.div`
 `;
 
 const Column = styled.div`
-    width: 100px;
-    height: 100px;
-    border-radius: 15px;
+    &:last-child {
+    place-self: end;
+  }
 `;
 
 const Username = styled.span`
@@ -26,7 +26,9 @@ const Payload = styled.p`
 `;
 
 const Photo = styled.img`
-
+    width: 100px;
+    height: 100px;
+    border-radius: 15px;
 `;
 
 export default function Tweet({username, photo, tweet} : ITweet) {
@@ -37,10 +39,9 @@ export default function Tweet({username, photo, tweet} : ITweet) {
                 <Username>{username}</Username>
                 <Payload>{tweet}</Payload>
             </Column>
-            {photo ? 
             <Column>
-                <Photo src={photo}/>
-            </Column> : null }
+                {photo ? <Photo src={photo}/> : null }
+            </Column>
         </Wrapper>
     );
 
