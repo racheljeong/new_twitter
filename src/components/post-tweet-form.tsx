@@ -100,7 +100,7 @@ export default function PostTweetForm() {
         const doc = await addDoc(collection(db, "tweets"), {
           tweet,
           createdAt: Date.now(),
-          user : user.displayName,
+          username : user.displayName || "Anonymous",
           userId : user.uid,
         });
         //file 첨부여부 확인
