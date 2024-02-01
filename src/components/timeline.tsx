@@ -45,8 +45,6 @@ export default function Timeline() {
                 const tweets = snapshot.docs.map((doc)=> {
                         const {tweet, createdAt, userId, username, photo} = doc.data();
                         //docId는 별도의 필드가 없으므로 지정함
-                    
-                    
                         return {tweet, createdAt, userId, username, photo, id : doc.id}
                         //ITweet에 부합한 트윗객체 리턴
                     });

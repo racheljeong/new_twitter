@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { ITweet } from "./timeline";
+import { auth, db, storage } from "../firebase";
+import { deleteDoc, doc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 
 const Wrapper = styled.div`
     display: grid;
@@ -31,13 +34,45 @@ const Photo = styled.img`
     border-radius: 15px;
 `;
 
-export default function Tweet({username, photo, tweet} : ITweet) {
+const DeleteButton = styled.button`
+    background-color: white;
+    color: tomato;
+    font-weight: 600;
+    border: 0;
+    font-size: 12px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+`;
 
+export default function Tweet({username, photo, tweet, userId, id} : ITweet) {
+    const user = auth.currentUser;
+    const onDelete = async() => {
+        const ok = confirm("Do you want to delete ?");
+        if(!ok || user?.uid !== userId) return;
+        try {
+            await deleteDoc(doc(db, "tweets", id));
+            //db 내에 tweets 컬렉션에 있고, 동일한 id를가진 doc을 삭제하겠다
+            //이미지 삭제 : 저장시  `tweets/${user.uid}-${user.displayName}/${doc.id}`
+            if(photo){
+                const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
+                await deleteObject(photoRef);
+            }
+        } catch (error) {
+            console.log(error);
+        } finally {
+
+        }
+    }
     return (
         <Wrapper>
             <Column>
                 <Username>{username}</Username>
                 <Payload>{tweet}</Payload>
+                {user?.uid === userId ? 
+                    <DeleteButton onClick={onDelete}>Delete</DeleteButton>
+                    : null }
             </Column>
             <Column>
                 {photo ? <Photo src={photo}/> : null }

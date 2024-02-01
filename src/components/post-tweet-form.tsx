@@ -109,7 +109,7 @@ export default function PostTweetForm() {
           //업로드 파일의 폴더명, 파일명 지정 : userId/docId 로 빠르게 crud가능
           const locationRef = ref(
             storage, 
-            `tweets/${user.uid}-${user.displayName}/${doc.id}`
+            `tweets/${user.uid}/${doc.id}`
             );
           const result = await uploadBytes(locationRef, file);
           const url = await getDownloadURL(result.ref); //result의 public URL return
