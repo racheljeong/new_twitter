@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { ITweet } from "./timeline";
 import { auth, db, storage } from "../firebase";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 
 const Wrapper = styled.div`
@@ -46,8 +46,26 @@ const DeleteButton = styled.button`
     cursor: pointer;
 `;
 
+const EditButton = styled.button`
+    background-color: white;
+    color: #4e4e4e;
+    font-weight: 600;
+    border: 0;
+    font-size: 12px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
+const ButtonDiv = styled.div`
+    display: flex;
+    gap: 5px;
+`;
+
 export default function Tweet({username, photo, tweet, userId, id} : ITweet) {
     const user = auth.currentUser;
+
     const onDelete = async() => {
         const ok = confirm("Do you want to delete ?");
         if(!ok || user?.uid !== userId) return;
@@ -65,14 +83,33 @@ export default function Tweet({username, photo, tweet, userId, id} : ITweet) {
 
         }
     }
+
+    const onEdit = async() => {
+        const ok = confirm("Do you want to edit ?");
+        if(!ok || user?.uid !== userId) return;
+        try {
+            const updated = doc(db, "tweet", id); 
+            //원글 가져오기
+            //추가할 트윗내용
+            //추가
+            await updateDoc(updated, {tweet : "abc"});
+        }catch(e) {
+            console.log(e);
+        }finally{
+
+        }
+    }
     return (
         <Wrapper>
             <Column>
                 <Username>{username}</Username>
                 <Payload>{tweet}</Payload>
                 {user?.uid === userId ? 
+                <ButtonDiv>
                     <DeleteButton onClick={onDelete}>Delete</DeleteButton>
-                    : null }
+                    <EditButton onClick={onEdit}>Edit</EditButton>
+                </ButtonDiv> 
+                : null }
             </Column>
             <Column>
                 {photo ? <Photo src={photo}/> : null }
