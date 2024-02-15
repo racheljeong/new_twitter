@@ -106,6 +106,7 @@ export default function PostTweetForm() {
         //file 첨부여부 확인
         if(file){
          
+          //location찾고 - byte로 업로드 - url로 다운받아 보여준다
           //업로드 파일의 폴더명, 파일명 지정 : userId/docId 로 빠르게 crud가능
           const locationRef = ref(
             storage, 
