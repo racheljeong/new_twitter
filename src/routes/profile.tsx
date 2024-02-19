@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { auth, db, storage } from "../firebase";
-import { useEffect, useState } from "react";
+import { InputHTMLAttributes, useEffect, useState } from "react";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
@@ -37,17 +37,37 @@ const Name = styled.span`
     font-size: 22px;
 `;
 
+const NameInput = styled.input`
+    border: none;
+    border-radius: 15px;
+`;
+
 const TweetsContainer = styled.div`
+    margin: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+`;
+
+const NameEditBtn = styled.button`
+    background-color: white;
+    color: #4e4e4e;
+    font-weight: 600;
+    border: 0;
+    font-size: 12px;
+    padding: 5px 10px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    cursor: pointer;
 `;
 
 export default function Profile() {
 
     const user = auth.currentUser;
     const [avatar, setAvatar] = useState(user?.photoURL);
+    const [name, setName] = useState(user?.displayName ?? "Anonymous");
     const [tweets, setTweets] = useState<ITweet[]>([]);
+    const [editYn, setEditYn] = useState(false);
     
     const avatarChange = async (e : React.ChangeEvent<HTMLInputElement>) => {
         
@@ -74,6 +94,7 @@ export default function Profile() {
             where("userId", "==" , user?.uid), //storage userId필드값과 같은 uid 찾기
             orderBy("createdAt", "desc"),
             limit(10)    
+        //firebase에서는 필터링을 제공하지 않음, 브라우저 에러에서 제공하는 url을 통해 필터링만들어야힘
         );
         const snapShot = await getDocs(tweetQuery);
         const tweets = snapShot.docs.map((doc) => {
@@ -86,6 +107,32 @@ export default function Profile() {
     useEffect(() => {
         fetchTweets();
     },[]);
+
+    const nameEdit = async() => {
+        setEditYn((prev) => !prev);
+        if(!editYn){
+            const ok = confirm("Do you want to edit?");
+        }
+        if(!name || !user || !editYn) return
+   
+        try {
+            await updateProfile(user, { displayName : name});
+            //setName(nameChanged);
+        } catch (error) {
+            console.log(error);            
+        } finally {
+            setEditYn(false);
+        }
+        
+    }
+
+    const changeName = (e : React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
+    }
+
+    // const setEditMode = (prev) => {
+    //     setEditYn((prev)=> !prev);
+    // }
     return (
         <Wrapper>
             <AvatarrUpload htmlFor="avatar">
@@ -105,9 +152,11 @@ export default function Profile() {
                          id="avatar"
                          type="file"
                          accept="image/*"/>
-            <Name>
-                {user?.displayName ?? "Anonymous"}
-            </Name>
+            <Name>{name}</Name>
+            {editYn &&
+                <NameInput onChange={changeName} value={name} />             
+            }
+            <NameEditBtn onClick={nameEdit}>{editYn ? "Save" : "Edit"}</NameEditBtn>
             <TweetsContainer>
                 {tweets.map((tweet) => <Tweet key={tweet.id} {...tweet} />)}
             </TweetsContainer>

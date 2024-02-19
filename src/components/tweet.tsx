@@ -3,6 +3,7 @@ import { ITweet } from "./timeline";
 import { auth, db, storage } from "../firebase";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
+import { useState } from "react";
 
 const Wrapper = styled.div`
     display: grid;
@@ -65,6 +66,7 @@ const ButtonDiv = styled.div`
 
 export default function Tweet({username, photo, tweet, userId, id} : ITweet) {
     const user = auth.currentUser;
+    const [isTweet, setIsTweet] = useState(tweet);
 
     const onDelete = async() => {
         const ok = confirm("Do you want to delete ?");
@@ -87,17 +89,18 @@ export default function Tweet({username, photo, tweet, userId, id} : ITweet) {
     const onEdit = async() => {
         const ok = confirm("Do you want to edit ?");
         if(!ok || user?.uid !== userId) return;
-        try {
-            const updated = doc(db, "tweet", id); 
-            //원글 가져오기
-            //추가할 트윗내용
-            //추가
-            await updateDoc(updated, {tweet : "abc"});
-        }catch(e) {
-            console.log(e);
-        }finally{
+        
+        // try {
+        //     const updated = doc(db, "tweet", id); 
+        //     //원글 가져오기
+        //     //추가할 트윗내용
+        //     //추가
+        //     await updateDoc(updated, {tweet : "abc"});
+        // }catch(e) {
+        //     console.log(e);
+        // }finally{
 
-        }
+        // }
     }
     return (
         <Wrapper>
